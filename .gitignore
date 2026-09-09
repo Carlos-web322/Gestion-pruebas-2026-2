@@ -1,0 +1,37 @@
+# Java / Maven
+target/
+*.class
+*.jar
+
+# Kotlin / Gradle
+.gradle/
+build/
+*.kotlin_module
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+
+# Node / React
+node_modules/
+dist/
+.next/
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
