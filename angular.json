@@ -2,11 +2,12 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "d752a63b-26ad-43b1-a684-4223e5bd86e2"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "crud-angular-localstorage": {
+    "punto-3-angular-crud": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -59,10 +60,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "crud-angular-localstorage:build:production"
+              "buildTarget": "punto-3-angular-crud:build:production"
             },
             "development": {
-              "buildTarget": "crud-angular-localstorage:build:development"
+              "buildTarget": "punto-3-angular-crud:build:development"
             }
           },
           "defaultConfiguration": "development"

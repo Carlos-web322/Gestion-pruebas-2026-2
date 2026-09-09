@@ -1,4 +1,6 @@
-# CrudAngularLocalstorage
+# Punto 3 - CRUD Angular
+
+CRUD de tareas hecho con Angular (standalone components, `@if`/`@for`), persistiendo en `localStorage` — sin backend. Desarrollado con TDD: ver [`task.service.spec.ts`](src/app/task.service.spec.ts) y [`app.spec.ts`](src/app/app.spec.ts).
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.36.
 
@@ -42,6 +44,12 @@ To execute unit tests with the [Karma](https://karma-runner.github.io) test runn
 
 ```bash
 ng test
+```
+
+Karma necesita un navegador Chromium instalado. Si no tienes Chrome, apunta `CHROME_BIN` a Edge (viene con Windows):
+
+```bash
+CHROME_BIN="C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" ng test --browsers=ChromeHeadless --watch=false
 ```
 
 ## Running end-to-end tests
