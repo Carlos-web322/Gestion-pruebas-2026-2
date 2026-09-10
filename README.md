@@ -17,7 +17,7 @@ Repositorio grupal para las entregas de la materia. Contiene los tres puntos del
 | Punto | Subparte | Responsable | Estado |
 |-------|----------|-------------|--------|
 | 1 | TDD Java | Carlos | ✅ Completado |
-| 1 | TDD Kotlin | Mateo Maya | ⚪ Pendiente |
+| 1 | TDD Kotlin | Mateo Maya | ✅ Completadoe |
 | 2 | Ejercicios Softtek | Carlos | ✅ Completado |
 | 3 | CRUD Python + TDD | Jorge Rivera | ⚪ Pendiente |
 | 3 | CRUD React + TDD | Harol | ⚪ Pendiente |
