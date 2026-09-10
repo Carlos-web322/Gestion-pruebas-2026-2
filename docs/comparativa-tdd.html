@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TDD Comparativo — Gestión de Pruebas 2026-2</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-code: #0b1120;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #a78bfa;
+    --border: #334155;
+    --java: #f97316;
+    --kotlin: #a855f7;
+    --softtek: #ec4899;
+    --python: #22c55e;
+    --react: #06b6d4;
+    --angular: #ef4444;
+    --success: #22c55e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 3rem 2rem 2rem;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+
+  header .meta {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  nav {
+    background: var(--bg-card);
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+
+  nav a:hover {
+    background: var(--bg);
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  section {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  section h3 {
+    font-size: 1.3rem;
+    margin: 1.5rem 0 0.8rem;
+    color: var(--accent-2);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-java { background: var(--java); color: white; }
+  .badge-kotlin { background: var(--kotlin); color: white; }
+  .badge-softtek { background: var(--softtek); color: white; }
+  .badge-python { background: var(--python); color: white; }
+  .badge-react { background: var(--react); color: white; }
+  .badge-angular { background: var(--angular); color: white; }
+  .badge-done { background: var(--success); color: white; }
+  .badge-pending { background: var(--text-muted); color: var(--bg); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: var(--bg);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background: var(--bg-code);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(56, 189, 248, 0.05); }
+
+  code {
+    background: var(--bg-code);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+    color: var(--accent);
+  }
+
+  pre {
+    background: var(--bg-code);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border-left: 3px solid var(--accent);
+    margin: 1rem 0;
+    font-size: 0.85rem;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+    color: var(--text);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 900px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .card h4 {
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li {
+    padding: 0.3rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+
+  .card ul li::before {
+    content: "▸";
+    color: var(--accent);
+    position: absolute;
+    left: 0;
+  }
+
+  .keyword-map {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .keyword-card {
+    background: var(--bg);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .keyword-card .concept {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  .responsables-table td:nth-child(3) {
+    font-weight: 600;
+  }
+
+  .toc-container {
+    background: var(--bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .toc-container ol {
+    padding-left: 1.5rem;
+  }
+
+  .toc-container li {
+    padding: 0.3rem 0;
+  }
+
+  .toc-container a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .toc-container a:hover {
+    text-decoration: underline;
+  }
+
+  .result-line {
+    display: inline-block;
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--success);
+    font-family: 'Consolas', monospace;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TDD Comparativo</h1>
+  <p>Test-Driven Development a través de 6 tecnologías</p>
+  <div class="meta">
+    Gestión de Pruebas y Configuración · Semestre 2026-2 · Politécnico Colombiano Jaime Isaza Cadavid
+  </div>
+</header>
+
+<nav>
+  <a href="#introduccion">Introducción</a>
+  <a href="#responsables">Responsables</a>
+  <a href="#filosofia">Filosofía TDD</a>
+  <a href="#comparativa">Comparativa</a>
+  <a href="#java">Java</a>
+  <a href="#kotlin">Kotlin</a>
+  <a href="#softtek">Softtek</a>
+  <a href="#python">Python</a>
+  <a href="#react">React</a>
+  <a href="#angular">Angular</a>
+  <a href="#conclusiones">Conclusiones</a>
+</nav>
+
+<main>
+
+<section id="introduccion">
+  <h2>📘 Introducción</h2>
+  <p>Este documento consolida el trabajo del equipo en la materia de Gestión de Pruebas y Configuración. El objetivo del proyecto fue aplicar <strong>Test-Driven Development (TDD)</strong> en distintos lenguajes y frameworks, para demostrar que la disciplina de pruebas es independiente de la tecnología: cambia la sintaxis, pero la estructura, el ciclo y los principios se mantienen.</p>
+
+  <p>El repositorio del proyecto está organizado en tres puntos, cada uno dividido en subpartes por tecnología. Cada subparte contiene su propio proyecto ejecutable con sus pruebas, y este documento sirve de guía transversal para entender qué se aplicó en cada caso y por qué.</p>
+
+  <div class="toc-container">
+    <strong>Contenido de esta página:</strong>
+    <ol>
+      <li><a href="#responsables">Responsables por subparte</a></li>
+      <li><a href="#filosofia">Filosofía común del TDD</a></li>
+      <li><a href="#comparativa">Tabla comparativa completa</a></li>
+      <li><a href="#java">Ejemplo Java (JUnit 5)</a></li>
+      <li><a href="#kotlin">Kotlin (JUnit 5 sobre JVM)</a></li>
+      <li><a href="#softtek">Java + Mockito (Ejercicios Softtek)</a></li>
+      <li><a href="#python">Python (pytest)</a></li>
+      <li><a href="#react">React (Jest + Testing Library)</a></li>
+      <li><a href="#angular">Angular (Jasmine + Karma)</a></li>
+      <li><a href="#conclusiones">Conclusiones</a></li>
+    </ol>
+  </div>
+</section>
+
+<section id="responsables">
+  <h2>👥 Responsables por subparte</h2>
+  <table class="responsables-table">
+    <thead>
+      <tr>
+        <th>Punto</th>
+        <th>Subparte</th>
+        <th>Responsable</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><span class="badge badge-java">Java</span> TDD con JUnit 5</td>
+        <td>Carlos Alberto Díaz</td>
+        <td><span class="badge badge-done">Completado</span></td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><span class="badge badge-kotlin">Kotlin</span> TDD</td>
+        <td>Mateo Maya</td>
+        <td><span class="badge badge-pending">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="badge badge-softtek">Softtek</span> Ejercicios (JUnit + Mockito)</td>
+        <td>Carlos Alberto Díaz</td>
+        <td><span class="badge badge-done">Completado</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge badge-python">Python</span> CRUD + TDD</td>
+        <td>Jorge Rivera</td>
+        <td><span class="badge badge-pending">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge badge-react">React</span> CRUD + TDD</td>
+        <td>Harol</td>
+        <td><span class="badge badge-pending">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge badge-angular">Angular</span> CRUD + TDD</td>
+        <td>Sebastián</td>
+        <td><span class="badge badge-done">Completado</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="filosofia">
+  <h2>🎯 Filosofía común del TDD</h2>
+  <p>Antes de mostrar las diferencias de sintaxis entre lenguajes, es fundamental establecer los conceptos que comparten todas las tecnologías empleadas en el proyecto. Estos fundamentos son transversales a Java, Kotlin, Python, React y Angular.</p>
+
+  <h3>1. El ciclo Red → Green → Refactor</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>🔴 Red</h4>
+      <p>Se escribe primero el test que describe el comportamiento esperado. Al ejecutarlo, <strong>debe fallar</strong>, porque el código de producción aún no existe. Esta falla intencional confirma que el test realmente detecta la ausencia del código.</p>
+    </div>
+    <div class="card">
+      <h4>🟢 Green</h4>
+      <p>Se escribe el <strong>mínimo</strong> código necesario para que el test pase. No se anticipan funcionalidades futuras ni se agregan validaciones extra: solo lo justo para pasar del rojo al verde.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 1rem;">
+    <h4>🔵 Refactor</h4>
+    <p>Con el test en verde, se mejora el código de producción (nombres, eliminación de duplicación, extracción de métodos, legibilidad) <strong>sin cambiar su comportamiento</strong>. La suite de tests actúa como red de seguridad: si un refactor rompe algo, un test se pondrá en rojo y avisará de inmediato.</p>
+  </div>
+
+  <h3>2. Estructura AAA (Arrange - Act - Assert)</h3>
+  <p>Todos los tests, sin importar el lenguaje, siguen esta estructura de tres fases:</p>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li><strong>Arrange:</strong> preparar los datos, instanciar objetos y configurar el estado inicial necesario.</li>
+    <li><strong>Act:</strong> ejecutar la acción concreta que se quiere probar (típicamente una llamada a un método).</li>
+    <li><strong>Assert:</strong> verificar que el resultado obtenido coincide con el resultado esperado.</li>
+  </ul>
+
+  <h3>3. Principio FIRST</h3>
+  <div class="keyword-map">
+    <div class="keyword-card">
+      <div class="concept">Fast</div>
+      <p>Los tests deben ejecutarse rápido para poder correrlos frecuentemente durante el desarrollo.</p>
+    </div>
+    <div class="keyword-card">
+      <div class="concept">Isolated</div>
+      <p>Cada test es independiente de los demás. El orden de ejecución no debe afectar el resultado.</p>
+    </div>
+    <div class="keyword-card">
+      <div class="concept">Repeatable</div>
+      <p>Debe producir el mismo resultado en cualquier entorno, sin depender de red, hora o estado externo.</p>
+    </div>
+    <div class="keyword-card">
+      <div class="concept">Self-validating</div>
+      <p>El test decide por sí mismo si pasó o falló mediante aserciones automáticas.</p>
+    </div>
+    <div class="keyword-card">
+      <div class="concept">Timely</div>
+      <p>Se escribe junto (o antes) del código de producción, no como un agregado posterior.</p>
+    </div>
+  </div>
+
+  <h3>4. Tipos de pruebas</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Qué prueba</th>
+        <th>Cuándo se usa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unitaria</strong></td>
+        <td>Una clase o función aislada, sin dependencias externas.</td>
+        <td>Base de la pirámide de pruebas. La más común y rápida.</td>
+      </tr>
+      <tr>
+        <td><strong>Integración</strong></td>
+        <td>Dos o más componentes reales trabajando juntos.</td>
+        <td>Para verificar que los componentes interactúan correctamente.</td>
+      </tr>
+      <tr>
+        <td><strong>Unitaria con mocks</strong></td>
+        <td>Una clase aislando sus dependencias mediante dobles (mocks, stubs).</td>
+        <td>Cuando la dependencia es lenta, costosa o incontrolable.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="comparativa">
+  <h2>📊 Tabla comparativa: misma estructura, diferente sintaxis</h2>
+  <p>Esta tabla muestra cómo cada concepto fundamental del TDD se expresa en cada una de las tecnologías utilizadas en el proyecto. Se puede leer horizontalmente (por concepto) para observar las variaciones sintácticas, o verticalmente (por lenguaje) para conocer las convenciones específicas de cada framework.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Java (JUnit 5)</th>
+        <th>Kotlin</th>
+        <th>Python (pytest)</th>
+        <th>React (Jest)</th>
+        <th>Angular (Jasmine)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Agrupar tests</strong></td>
+        <td><code>class MyTest {}</code></td>
+        <td><code>class MyTest {}</code></td>
+        <td><code>class TestMy:</code></td>
+        <td><code>describe(...)</code></td>
+        <td><code>describe(...)</code></td>
+      </tr>
+      <tr>
+        <td><strong>Definir un test</strong></td>
+        <td><code>@Test void test() {}</code></td>
+        <td><code>@Test fun test() {}</code></td>
+        <td><code>def test_...():</code></td>
+        <td><code>it(...)</code> o <code>test(...)</code></td>
+        <td><code>it(...)</code></td>
+      </tr>
+      <tr>
+        <td><strong>Setup antes de cada test</strong></td>
+        <td><code>@BeforeEach</code></td>
+        <td><code>@BeforeEach</code></td>
+        <td><code>setup_method()</code> o fixture</td>
+        <td><code>beforeEach(...)</code></td>
+        <td><code>beforeEach(...)</code></td>
+      </tr>
+      <tr>
+        <td><strong>Aserción de igualdad</strong></td>
+        <td><code>assertEquals(exp, act)</code></td>
+        <td><code>assertEquals(exp, act)</code></td>
+        <td><code>assert x == y</code></td>
+        <td><code>expect(x).toBe(y)</code></td>
+        <td><code>expect(x).toBe(y)</code></td>
+      </tr>
+      <tr>
+        <td><strong>Aserción de excepción</strong></td>
+        <td><code>assertThrows(...)</code></td>
+        <td><code>assertFailsWith { }</code></td>
+        <td><code>pytest.raises(...)</code></td>
+        <td><code>expect(fn).toThrow()</code></td>
+        <td><code>expect(fn).toThrow()</code></td>
+      </tr>
+      <tr>
+        <td><strong>Mocks / dobles</strong></td>
+        <td>Mockito <code>@Mock</code></td>
+        <td>Mockito / MockK</td>
+        <td><code>unittest.mock</code></td>
+        <td><code>jest.fn()</code>, <code>jest.mock()</code></td>
+        <td><code>jasmine.createSpy()</code></td>
+      </tr>
+      <tr>
+        <td><strong>Herramienta de build</strong></td>
+        <td>Maven / Gradle</td>
+        <td>Gradle</td>
+        <td>pip / poetry</td>
+        <td>npm</td>
+        <td>npm + Angular CLI</td>
+      </tr>
+      <tr>
+        <td><strong>Comando para correr</strong></td>
+        <td><code>mvn test</code></td>
+        <td><code>gradle test</code></td>
+        <td><code>pytest</code></td>
+        <td><code>npm test</code></td>
+        <td><code>ng test</code></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="java">
+  <h2><span class="badge badge-java">Java</span> Punto 1 — TDD con JUnit 5</h2>
+  <p><strong>Responsable:</strong> Carlos Alberto Díaz · <strong>Framework:</strong> JUnit Jupiter 5.10.2 · <strong>Build:</strong> Maven 3 · <strong>JDK:</strong> Temurin 17</p>
+
+  <h3>Descripción del ejercicio</h3>
+  <p>Se implementó una clase <code>Calculator</code> con los métodos <code>add</code>, <code>subtract</code>, <code>multiply</code> y <code>divide</code>. Cada método se desarrolló aplicando el ciclo Red → Green → Refactor: primero se escribió un test que llamaba al método (fallando en compilación), luego se creó el método con la implementación mínima necesaria, y finalmente se verificó que el test pasara en verde.</p>
+
+  <h3>Código del test</h3>
+<pre><code>package com.example;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import com.example.util.Calculator;
+
+class CalculatorTest {
+
+    private final Calculator calculator = new Calculator();
+
+    @Test
+    void addition() {
+        assertEquals(2, calculator.add(1, 1));
+    }
+
+    @Test
+    void subtraction() {
+        assertEquals(3, calculator.subtract(5, 2));
+    }
+
+    @Test
+    void multiplication() {
+        assertEquals(12, calculator.multiply(3, 4));
+    }
+
+    @Test
+    void division() {
+        assertEquals(5, calculator.divide(10, 2));
+    }
+}</code></pre>
+
+  <h3>Código de producción</h3>
+<pre><code>package com.example.util;
+
+public class Calculator {
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+
+    public int multiply(int a, int b) {
+        return a * b;
+    }
+
+    public int divide(int a, int b) {
+        return a / b;
+    }
+}</code></pre>
+
+  <h3>Elementos técnicos aplicados</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li>La anotación <code>@Test</code> de JUnit Jupiter identifica cada método como una prueba automatizada.</li>
+    <li>La aserción <code>assertEquals(esperado, obtenido)</code> es autovalidante: el test decide por sí mismo si pasa o falla.</li>
+    <li>Separación estándar de paquetes según convención Maven: <code>com.example.util</code> para producción en <code>src/main/java</code>, <code>com.example</code> para tests en <code>src/test/java</code>.</li>
+    <li>Cada test es independiente: se instancia una nueva <code>Calculator</code> por clase, cumpliendo el principio <strong>Isolated</strong> del FIRST.</li>
+  </ul>
+
+  <div class="result-line">✅ Resultado: 5 tests ejecutados, 0 fallos, 0 errores (mvn test)</div>
+</section>
+
+<section id="kotlin">
+  <h2><span class="badge badge-kotlin">Kotlin</span> Punto 1 — TDD en Kotlin</h2>
+  <p><strong>Responsable:</strong> Mateo Maya · <strong>Framework:</strong> JUnit 5 · <strong>Build:</strong> Gradle · <strong>Plataforma:</strong> JVM</p>
+
+  <h3>Descripción del ejercicio</h3>
+  <p>Al igual que en Java, se implementa una clase de utilidad simple aplicando el ciclo TDD. Kotlin corre sobre la JVM y es completamente interoperable con JUnit, por lo que las anotaciones y aserciones son idénticas. La diferencia radica en la sintaxis del lenguaje: más concisa, sin punto y coma, con tipos inferidos, y con la posibilidad de nombrar tests con backticks para mayor legibilidad.</p>
+
+  <h3>Código del test (equivalente en Kotlin)</h3>
+<pre><code>package com.example
+
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+
+class CalculatorTest {
+
+    private val calculator = Calculator()
+
+    @Test
+    fun `sumar dos numeros positivos`() {
+        assertEquals(2, calculator.add(1, 1))
+    }
+
+    @Test
+    fun `restar dos numeros`() {
+        assertEquals(3, calculator.subtract(5, 2))
+    }
+}</code></pre>
+
+  <h3>Código de producción</h3>
+<pre><code>package com.example
+
+class Calculator {
+    fun add(a: Int, b: Int): Int = a + b
+    fun subtract(a: Int, b: Int): Int = a - b
+}</code></pre>
+
+  <h3>Elementos técnicos aplicados</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li>Interoperabilidad JVM: se utilizan las mismas anotaciones de JUnit 5 que en Java (<code>@Test</code>, <code>@BeforeEach</code>).</li>
+    <li>Sintaxis expresiva: <code>fun</code> reemplaza <code>void</code>, la palabra <code>val</code> declara inmutables, y no se usan puntos y comas.</li>
+    <li>Los nombres de tests entre backticks permiten escribir el título de la prueba como una frase legible en español.</li>
+    <li>Las funciones de una sola línea (<code>fun add(a: Int, b: Int): Int = a + b</code>) hacen el código de producción más compacto sin sacrificar claridad.</li>
+  </ul>
+</section>
+
+<section id="softtek">
+  <h2><span class="badge badge-softtek">Softtek</span> Punto 2 — Ejercicios JUnit + Mockito</h2>
+  <p><strong>Responsable:</strong> Carlos Alberto Díaz · <strong>Framework:</strong> JUnit 5 + Mockito 5.11 · <strong>Build:</strong> Maven</p>
+
+  <h3>Descripción del ejercicio</h3>
+  <p>Replicación modernizada del ejercicio propuesto por Softtek en su artículo <em>"¿Por qué hacer testing unitario?"</em>. Consiste en un solucionador de ecuaciones de primer grado del tipo <code>ax + b = c</code>, con la solución <code>x = (c - b) / a</code>. El proyecto contiene dos clases de producción y tres suites de pruebas que ilustran los tres tipos principales de test.</p>
+
+  <h3>Estructura del proyecto</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Suite</th>
+        <th>Tipo</th>
+        <th>Qué prueba</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>ParseadorTest</code></td>
+        <td>Unitaria pura</td>
+        <td>Los métodos del <code>Parseador</code>, sin dependencias externas.</td>
+      </tr>
+      <tr>
+        <td><code>EcuacionPrimerGradoIntegrationTest</code></td>
+        <td>Integración</td>
+        <td><code>EcuacionPrimerGrado</code> usando el <code>Parseador</code> real.</td>
+      </tr>
+      <tr>
+        <td><code>EcuacionPrimerGradoMockitoTest</code></td>
+        <td>Unitaria con mocks</td>
+        <td>Solo la fórmula, con <code>Parseador</code> mockeado.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Ejemplo destacado: test con Mockito</h3>
+<pre><code>@ExtendWith(MockitoExtension.class)
+class EcuacionPrimerGradoMockitoTest {
+
+    @InjectMocks
+    private EcuacionPrimerGrado ecuacionPrimerGrado;
+
+    @Mock
+    private Parseador parseador;
+
+    @Test
+    void solucionaEcuacionConMenos() {
+        // Arrange: configuramos el mock
+        String ecuacion = "2x - 1 = 0";
+        when(parseador.obtenerParte1(ecuacion)).thenReturn(2);
+        when(parseador.obtenerParte2(ecuacion)).thenReturn(-1);
+        when(parseador.obtenerParte3(ecuacion)).thenReturn(0);
+
+        // Act
+        Double resultado = ecuacionPrimerGrado.obtenerResultado(ecuacion);
+
+        // Assert
+        assertEquals(0.5, resultado);
+    }
+}</code></pre>
+
+  <h3>Elementos técnicos aplicados</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li><code>@ExtendWith(MockitoExtension.class)</code> integra Mockito con JUnit 5, reemplazando el <code>MockitoAnnotations.initMocks()</code> del ejemplo original en JUnit 4.</li>
+    <li><code>@InjectMocks</code> permite que Mockito inyecte automáticamente los mocks en la clase bajo prueba.</li>
+    <li><code>@Mock</code> crea un doble del <code>Parseador</code> cuyo comportamiento se define con <code>when(...).thenReturn(...)</code>.</li>
+    <li>Al aislar el SUT (System Under Test), los tests unitarios verifican únicamente la fórmula matemática, sin depender de la lógica de parseo de strings.</li>
+    <li>Los comentarios en el test señalan explícitamente las tres fases de la estructura AAA (Arrange, Act, Assert).</li>
+  </ul>
+
+  <h3>Modernización frente al artículo original</h3>
+  <p>El artículo de Softtek utiliza JUnit 4. Este proyecto lo modernizó a JUnit 5, con las siguientes equivalencias:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>JUnit 4 (artículo)</th>
+        <th>JUnit 5 (este proyecto)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Inicializar mocks</td>
+        <td><code>MockitoAnnotations.initMocks()</code> en <code>@Before</code></td>
+        <td><code>@ExtendWith(MockitoExtension.class)</code></td>
+      </tr>
+      <tr>
+        <td>Aserciones</td>
+        <td><code>org.junit.Assert.*</code></td>
+        <td><code>org.junit.jupiter.api.Assertions.*</code></td>
+      </tr>
+      <tr>
+        <td>Anotación de test</td>
+        <td><code>import org.junit.Test</code></td>
+        <td><code>import org.junit.jupiter.api.Test</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="result-line">✅ Resultado: 12 tests ejecutados, 0 fallos, 0 errores (mvn test)</div>
+</section>
+
+<section id="python">
+  <h2><span class="badge badge-python">Python</span> Punto 3 — CRUD + TDD</h2>
+  <p><strong>Responsable:</strong> Jorge Rivera · <strong>Framework:</strong> pytest · <strong>Build:</strong> pip / poetry</p>
+
+  <h3>Descripción del ejercicio</h3>
+  <p>El objetivo es construir un CRUD siguiendo TDD estricto en Python, utilizando <strong>pytest</strong> como framework de pruebas. A diferencia de Java, Python no requiere anotaciones: cualquier función cuyo nombre empiece con <code>test_</code> es reconocida automáticamente por pytest. Las aserciones utilizan el <code>assert</code> nativo del lenguaje.</p>
+
+  <h3>Ejemplo de estructura equivalente en pytest</h3>
+<pre><code># test_calculator.py
+import pytest
+from calculator import Calculator
+
+@pytest.fixture
+def calculator():
+    return Calculator()
+
+def test_addition(calculator):
+    assert calculator.add(1, 1) == 2
+
+def test_subtraction(calculator):
+    assert calculator.subtract(5, 2) == 3
+
+def test_division_by_zero_raises_error(calculator):
+    with pytest.raises(ZeroDivisionError):
+        calculator.divide(10, 0)</code></pre>
+
+<pre><code># calculator.py
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+    def subtract(self, a, b):
+        return a - b
+
+    def divide(self, a, b):
+        return a / b</code></pre>
+
+  <h3>Elementos técnicos aplicados</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li>Las <em>fixtures</em> decoradas con <code>@pytest.fixture</code> cumplen el rol de <code>@BeforeEach</code> en JUnit: preparan el estado inicial y se inyectan como parámetro del test.</li>
+    <li>Las aserciones nativas (<code>assert x == y</code>) reemplazan a <code>assertEquals</code> de JUnit. pytest reformatea automáticamente el mensaje de error para hacerlo expresivo.</li>
+    <li>El manejo de excepciones se realiza con <code>with pytest.raises(...)</code>, equivalente a <code>assertThrows</code> en JUnit 5.</li>
+    <li>pytest descubre automáticamente los tests en cualquier archivo <code>test_*.py</code>, sin necesidad de configuración explícita.</li>
+    <li>Los mocks se implementan con <code>unittest.mock</code>, librería estándar de Python análoga a Mockito.</li>
+  </ul>
+</section>
+
+<section id="react">
+  <h2><span class="badge badge-react">React</span> Punto 3 — CRUD + TDD</h2>
+  <p><strong>Responsable:</strong> Harol · <strong>Framework:</strong> Jest + React Testing Library · <strong>Build:</strong> npm</p>
+
+  <h3>Descripción del ejercicio</h3>
+  <p>El objetivo es construir un CRUD en React aplicando TDD. Se utiliza <strong>Jest</strong> como test runner y <strong>React Testing Library</strong> como utilidad para renderizar componentes y consultar el DOM resultante. La filosofía de RTL es probar los componentes desde la perspectiva del usuario: buscar por texto visible, por rol de accesibilidad o por etiqueta, evitando depender de selectores CSS internos.</p>
+
+  <h3>Ejemplo de test de componente</h3>
+<pre><code>// TaskList.test.jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import TaskList from './TaskList';
+
+describe('TaskList', () => {
+    it('muestra estado vacío sin tareas', () => {
+        render(&lt;TaskList /&gt;);
+        expect(screen.getByText('Sin tareas')).toBeInTheDocument();
+    });
+
+    it('agrega una tarea al enviar el formulario', () => {
+        render(&lt;TaskList /&gt;);
+        const input = screen.getByPlaceholderText('Nueva tarea');
+        const button = screen.getByRole('button', { name: /agregar/i });
+
+        fireEvent.change(input, { target: { value: 'Comprar pan' } });
+        fireEvent.click(button);
+
+        expect(screen.getByText('Comprar pan')).toBeInTheDocument();
+    });
+});</code></pre>
+
+  <h3>Elementos técnicos aplicados</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li><code>describe</code> agrupa tests relacionados; <code>it</code> define cada prueba individual — equivalentes a <code>class</code> y <code>@Test</code> en JUnit.</li>
+    <li><code>expect(...).toBe(...)</code> es la aserción de Jest, análoga a <code>assertEquals</code>.</li>
+    <li><code>render(...)</code> monta el componente en un DOM virtual (JSDOM), sin necesidad de un navegador real.</li>
+    <li>Los métodos de consulta (<code>screen.getByRole</code>, <code>getByText</code>, <code>getByPlaceholderText</code>) buscan elementos del modo en que un usuario los encontraría.</li>
+    <li><code>fireEvent</code> permite simular interacciones del usuario: clics, escritura, envío de formularios.</li>
+    <li>Los mocks se crean con <code>jest.fn()</code>, generando funciones espía que registran llamadas, argumentos y valores retornados.</li>
+  </ul>
+</section>
+
+<section id="angular">
+  <h2><span class="badge badge-angular">Angular</span> Punto 3 — CRUD + TDD</h2>
+  <p><strong>Responsable:</strong> Sebastián · <strong>Framework:</strong> Jasmine 4.6 + Karma 6.4 · <strong>Build:</strong> Angular CLI 20.3</p>
+
+  <h3>Descripción del ejercicio</h3>
+  <p>Aplicación CRUD de tareas construida con <strong>standalone components</strong> de Angular, sin backend, persistiendo el estado en <code>localStorage</code>. Se implementaron dos capas: un servicio (<code>TaskService</code>) que encapsula la lógica CRUD, y un componente (<code>App</code>) que gestiona la interacción con el usuario. Cada capa tiene su propia suite de pruebas.</p>
+
+  <h3>Cobertura de pruebas</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>task.service.spec.ts (9 tests)</h4>
+      <ul>
+        <li>Inicia sin tareas</li>
+        <li>Crea una tarea y le asigna un id</li>
+        <li>Persiste en localStorage</li>
+        <li>Lee tareas existentes al construirse</li>
+        <li>Actualiza una tarea por id</li>
+        <li>Devuelve null al actualizar id inexistente</li>
+        <li>Elimina una tarea por id</li>
+        <li>No afecta otras tareas al eliminar una</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>app.spec.ts (7 tests)</h4>
+      <ul>
+        <li>Muestra estado vacío sin tareas</li>
+        <li>Agrega tarea desde el formulario</li>
+        <li>Limpia el input después de agregar</li>
+        <li>Marca tarea como completada</li>
+        <li>Edita el título de una tarea</li>
+        <li>Elimina una tarea</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Ejemplo destacado: test del servicio</h3>
+<pre><code>describe('TaskService', () =&gt; {
+    let service: TaskService;
+
+    beforeEach(() =&gt; {
+        localStorage.clear();
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(TaskService);
+    });
+
+    it('crea una tarea y le asigna un id', () =&gt; {
+        const task = service.create('Comprar pan');
+
+        expect(task.id).toBeTruthy();
+        expect(task.title).toBe('Comprar pan');
+        expect(task.completed).toBe(false);
+        expect(service.getAll()).toEqual([task]);
+    });
+
+    it('devuelve null al actualizar una tarea que no existe', () =&gt; {
+        const updated = service.update('missing-id', { title: 'x' });
+        expect(updated).toBeNull();
+    });
+});</code></pre>
+
+  <h3>Elementos técnicos aplicados</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li><code>TestBed</code> es la utilidad de Angular para configurar el módulo de pruebas e inyectar servicios como lo haría el framework en producción.</li>
+    <li><code>beforeEach</code> asegura que cada test comience con <code>localStorage</code> limpio y un servicio recién inyectado, cumpliendo el principio <strong>Isolated</strong>.</li>
+    <li>El test <em>"devuelve null al actualizar una tarea que no existe"</em> verifica el comportamiento ante datos inválidos (edge case), un caso frecuentemente olvidado que suele originar bugs en producción.</li>
+    <li>El test <em>"no toca otras tareas al eliminar una"</em> comprueba que la operación DELETE es quirúrgica y no genera efectos colaterales indeseados sobre el resto del estado.</li>
+    <li>Los tests del componente utilizan <code>fixture.detectChanges()</code> para forzar el renderizado del DOM, y simulan interacciones con <code>dispatchEvent</code> y <code>click()</code>, reproduciendo el comportamiento real del usuario.</li>
+  </ul>
+
+  <div class="result-line">✅ Resultado: 16 tests ejecutados, 0 fallos (ng test)</div>
+</section>
+
+<section id="conclusiones">
+  <h2>🏆 Conclusiones</h2>
+
+  <h3>Hallazgos del proyecto</h3>
+  <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+    <li><strong>El TDD es agnóstico al lenguaje.</strong> El ciclo Red → Green → Refactor, la estructura AAA y el principio FIRST se aplicaron de manera consistente en Java, Kotlin, Python, React y Angular.</li>
+    <li><strong>Los frameworks cambian, la filosofía no.</strong> <code>@Test</code> en JUnit, <code>it(...)</code> en Jasmine y <code>def test_...</code> en pytest son formas distintas de expresar la misma intención: <em>"esta función es un test que debe validarse automáticamente"</em>.</li>
+    <li><strong>Los mocks son un patrón universal.</strong> Mockito, <code>jest.fn</code>, <code>unittest.mock</code> y <code>jasmine.createSpy</code> resuelven el mismo problema: aislar la clase bajo prueba de sus dependencias.</li>
+    <li><strong>La UI complica pero no cambia el fondo.</strong> Probar componentes de React o Angular requiere fixtures, simulación de eventos y verificación del DOM, pero el patrón Arrange-Act-Assert se mantiene intacto.</li>
+    <li><strong>La disciplina TDD produce mejor diseño.</strong> Al escribir el test primero, se piensa en la interfaz pública de la clase (cómo se usa) antes que en su implementación (cómo funciona). Esto tiende a producir código más modular y desacoplado.</li>
+  </ul>
+
+  <h3>Conceptos que atraviesan todo el proyecto</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Definición</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TDD</td>
+        <td>Metodología en la que se escribe el test antes que el código, siguiendo el ciclo Red → Green → Refactor.</td>
+      </tr>
+      <tr>
+        <td>Por qué el test primero</td>
+        <td>Garantiza que el test realmente prueba algo. Un test que nunca ha fallado no es confiable como red de seguridad.</td>
+      </tr>
+      <tr>
+        <td>Test unitario vs. integración</td>
+        <td>El unitario prueba una clase aislada; la integración prueba dos o más componentes reales trabajando juntos.</td>
+      </tr>
+      <tr>
+        <td>Para qué sirven los mocks</td>
+        <td>Aislar el SUT reemplazando sus dependencias con dobles controlados, para que los fallos apunten al SUT y no a colaboradores.</td>
+      </tr>
+      <tr>
+        <td>Principio FIRST</td>
+        <td>Fast, Isolated, Repeatable, Self-validating, Timely: las cinco cualidades de un buen test unitario.</td>
+      </tr>
+      <tr>
+        <td>Estructura AAA</td>
+        <td>Arrange, Act, Assert: la organización estándar del cuerpo de cualquier test, en cualquier lenguaje.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+
+<footer>
+  <p>Gestión de Pruebas y Configuración · Semestre 2026-2</p>
+  <p>Politécnico Colombiano Jaime Isaza Cadavid</p>
+</footer>
+
+</body>
+</html>
