@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Usuarios - TDD</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px; }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 30px; color: #333; }
+
+        .form-card {
+            background: white; border-radius: 8px; padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px;
+        }
+        .form-card h2 { font-size: 16px; color: #555; margin-bottom: 16px; }
+        .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+        .form-row input {
+            flex: 1; padding: 10px 12px; border: 1px solid #d9d9d9;
+            border-radius: 6px; font-size: 14px; outline: none;
+        }
+        .form-row input:focus { border-color: #1890ff; }
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 6px;
+            font-size: 14px; cursor: pointer; font-weight: 500;
+        }
+        .btn-primary { background: #1890ff; color: white; }
+        .btn-primary:hover { background: #096dd9; }
+        .btn-cancel { background: #f0f0f0; color: #333; }
+        .btn-cancel:hover { background: #d9d9d9; }
+        .btn-edit { background: #faad14; color: white; padding: 6px 12px; font-size: 12px; }
+        .btn-edit:hover { background: #d48806; }
+        .btn-delete { background: #ff4d4f; color: white; padding: 6px 12px; font-size: 12px; }
+        .btn-delete:hover { background: #cf1322; }
+        .form-actions { display: flex; gap: 8px; }
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        th { background: #fafafa; padding: 12px 16px; text-align: left; font-size: 13px; color: #888; border-bottom: 1px solid #f0f0f0; }
+        td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        tr:hover { background: #fafafa; }
+        .actions { display: flex; gap: 6px; }
+        .empty { text-align: center; padding: 40px; color: #999; }
+        .msg { padding: 10px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+        .msg-ok { background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; }
+        .msg-err { background: #fff2f0; color: #cf1322; border: 1px solid #ffccc7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CRUD Usuarios</h1>
+        <div id="mensaje"></div>
+
+        <div class="form-card">
+            <h2 id="form-titulo">Nuevo usuario</h2>
+            <input type="hidden" id="edit-id">
+            <div class="form-row">
+                <input type="text" id="nombre" placeholder="Nombre">
+                <input type="email" id="email" placeholder="Email">
+                <input type="number" id="edad" placeholder="Edad">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+                <button class="btn btn-cancel" onclick="cancelar()" id="btn-cancelar" style="display:none">Cancelar</button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Edad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-body">
+                <tr><td colspan="5" class="empty">Cargando...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API = '/usuarios';
+
+        async function cargar() {
+            const resp = await fetch(API);
+            const datos = await resp.json();
+            const body = document.getElementById('tabla-body');
+            if (datos.length === 0) {
+                body.innerHTML = '<tr><td colspan="5" class="empty">No hay usuarios registrados</td></tr>';
+                return;
+            }
+            body.innerHTML = datos.map(u => `
+                <tr>
+                    <td>${u.id}</td>
+                    <td>${u.nombre}</td>
+                    <td>${u.email}</td>
+                    <td>${u.edad ?? '—'}</td>
+                    <td class="actions">
+                        <button class="btn btn-edit" onclick="editar(${u.id}, '${u.nombre}', '${u.email}', ${u.edad ?? 'null'})">Editar</button>
+                        <button class="btn btn-delete" onclick="eliminar(${u.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function guardar() {
+            const id = document.getElementById('edit-id').value;
+            const data = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                edad: document.getElementById('edad').value ? parseInt(document.getElementById('edad').value) : null,
+            };
+            if (!data.nombre || !data.email) {
+                mostrar('Nombre y email son obligatorios', 'err');
+                return;
+            }
+            const url = id ? `${API}/${id}` : API;
+            const method = id ? 'PUT' : 'POST';
+            const resp = await fetch(url, {
+                method, headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data),
+            });
+            if (resp.ok) {
+                mostrar(id ? 'Usuario actualizado' : 'Usuario creado', 'ok');
+                cancelar();
+                cargar();
+            } else {
+                const err = await resp.json();
+                mostrar(err.error || 'Error', 'err');
+            }
+        }
+
+        function editar(id, nombre, email, edad) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('nombre').value = nombre;
+            document.getElementById('email').value = email;
+            document.getElementById('edad').value = edad ?? '';
+            document.getElementById('form-titulo').textContent = 'Editar usuario';
+            document.getElementById('btn-cancelar').style.display = 'inline-block';
+        }
+
+        function cancelar() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('nombre').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('edad').value = '';
+            document.getElementById('form-titulo').textContent = 'Nuevo usuario';
+            document.getElementById('btn-cancelar').style.display = 'none';
+        }
+
+        async function eliminar(id) {
+            if (!confirm('Eliminar este usuario?')) return;
+            const resp = await fetch(`${API}/${id}`, { method: 'DELETE' });
+            if (resp.ok) {
+                mostrar('Usuario eliminado', 'ok');
+                cargar();
+            }
+        }
+
+        function mostrar(texto, tipo) {
+            const el = document.getElementById('mensaje');
+            el.innerHTML = `<div class="msg msg-${tipo}">${texto}</div>`;
+            setTimeout(() => el.innerHTML = '', 3000);
+        }
+
+        cargar();
+    </script>
+</body>
+</html>
