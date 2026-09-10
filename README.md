@@ -21,7 +21,7 @@ Repositorio grupal para las entregas de la materia. Contiene los tres puntos del
 | 2 | Ejercicios Softtek | Carlos | ✅ Completado |
 | 3 | CRUD Python + TDD | Jorge Rivera | ⚪ Pendiente |
 | 3 | CRUD React + TDD | Harol | ⚪ Pendiente |
-| 3 | CRUD (lenguaje por definir) + TDD | Sebastián | ⚪ Pendiente |
+| 3 | CRUD Angular + TDD | Sebastián | ✅ Completado |
 
 ## Estructura del repositorio
 
@@ -31,10 +31,10 @@ Gestion-pruebas-2026-2/
 │   ├── java/               # TDD con JUnit 5
 │   └── kotlin/             # TDD con Kotlin
 ├── punto-2-softtek/        # Ejercicios Softtek
-└── punto-3-crud-tdd/
-    ├── python/             # CRUD + TDD en Python
-    ├── react/              # CRUD + TDD en React
-    └── otro-lenguaje/      # CRUD + TDD (otro lenguaje)
+├── punto-3-crud-tdd/
+│   ├── python/             # CRUD + TDD en Python
+│   └── react/              # CRUD + TDD en React
+└── punto-3-angular/        # CRUD + TDD en Angular
 ```
 
 Cada subcarpeta contiene su propio README con instrucciones específicas para correr el proyecto y sus pruebas.
