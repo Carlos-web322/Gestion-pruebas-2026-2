@@ -1,75 +1,44 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Instalación
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+| Comando            | Descripción                                       |
+|---------------------|--------------------------------------------------|
+| `npm run dev`       | Levanta el servidor de desarrollo                |
+| `npm run test`      | Corre los tests                                  |
+| `npm run test:ui`   | Corre los tests con interfaz visual de Vitest    |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Estructura del proyecto
 
 ```
+src/
+├── components/          # Componentes de UI, sin lógica de negocio
+│   ├── TareaForm.tsx    # Formulario para agregar una tarea
+│   ├── TareaItem.tsx    # Una tarea individual (checkbox + texto + eliminar)
+│   ├── TareaList.tsx    # Lista de tareas (o mensaje si está vacía)
+│   └── __tests__/       # Tests de cada componente
+├── hooks/
+│   ├── useTareas.ts     # Estado y lógica de negocio: agregar, togglear, eliminar
+│   └── __tests__/
+├── types/
+│   └── Tarea.ts         # Tipo compartido: { id, texto, completada }
+├── utils/
+│   ├── storage.ts        # Lectura/escritura de tareas en localStorage
+│   └── __tests__/
+├── App.tsx               # Composición: conecta el hook con los componentes
+└── main.tsx               # Punto de entrada de la aplicación
+```
+
+- **`components/`** Renderiza y dispara eventos
+- **`hooks/useTareas`** Lógica del CRUD y persistencia en el `localStorage`
+- **`utils/storage.ts`** Aisla acceso a `localStorage`
+- Los test viven junto a lo que testean (carpetas `__tests__/`)
+
+  Cada pieza del proyecto siguió este ciclo:
+
+1. **Red** — se escribe una prueba que describe el comportamiento esperado y falla porque el código aún no existe.
+2. **Green** — se escribe el código mínimo necesario para que la prueba pase.
