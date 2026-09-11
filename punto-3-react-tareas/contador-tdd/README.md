@@ -16,16 +16,16 @@ npm install
 
 ```
 src/
-├── components/          # Componentes de UI, sin lógica de negocio
+├── components/          # Componentes
 │   ├── TareaForm.tsx    # Formulario para agregar una tarea
 │   ├── TareaItem.tsx    # Una tarea individual (checkbox + texto + eliminar)
 │   ├── TareaList.tsx    # Lista de tareas (o mensaje si está vacía)
 │   └── __tests__/       # Tests de cada componente
 ├── hooks/
-│   ├── useTareas.ts     # Estado y lógica de negocio: agregar, togglear, eliminar
+│   ├── useTareas.ts     # Estado y lógica: agregar, togglear, eliminar
 │   └── __tests__/
 ├── types/
-│   └── Tarea.ts         # Tipo compartido: { id, texto, completada }
+│   └── Tarea.ts         # Tipado de tarea: { id, texto, estado }
 ├── utils/
 │   ├── storage.ts        # Lectura/escritura de tareas en localStorage
 │   └── __tests__/
@@ -42,3 +42,6 @@ src/
 
 1. **Red** — se escribe una prueba que describe el comportamiento esperado y falla porque el código aún no existe.
 2. **Green** — se escribe el código mínimo necesario para que la prueba pase.
+
+
+
