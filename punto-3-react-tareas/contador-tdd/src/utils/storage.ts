@@ -1,13 +1,13 @@
-import type { Todo } from "../types/Todos";
+import type { Tarea } from "../types/Tarea";
 
-const STORAGE_KEY = 'todos';
+const STORAGE_KEY = 'tarea';
 
-export function getTodos() : Todo[] {
+export function getTarea() : Tarea[] {
     const raw = localStorage.getItem(STORAGE_KEY)
     if(!raw) return []
     return JSON.parse(raw)
 }
 
-export function saveTodos(todos: Todo[]): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+export function saveTarea(tarea: Tarea[]): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tarea))
 }

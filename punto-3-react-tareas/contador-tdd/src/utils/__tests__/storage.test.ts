@@ -1,5 +1,5 @@
-import type { Todo } from '../../types/Todos';
-import { getTodos, saveTodos } from '../storage';
+import type { Tarea } from '../../types/Tarea';
+import { getTarea, saveTarea } from '../storage';
 
 describe('storage', () => {
   beforeEach(() => {
@@ -7,17 +7,17 @@ describe('storage', () => {
   })
 
   it('devuelve una lista vacía si no hay tareas guardadas', () => {
-    expect(getTodos()).toEqual([])
+    expect(getTarea()).toEqual([])
   })
 
   it('guarda tareas y luego las recupera correctamente', () => {
-    const todos: Todo[] = [
+    const todos: Tarea[] = [
       { id: '1', text: 'Aprender TDD', estado: false },
       { id: '2', text: 'Tomar café', estado: true },
     ]
 
-    saveTodos(todos)
+    saveTarea(todos)
 
-    expect(getTodos()).toEqual(todos)
+    expect(getTarea()).toEqual(todos)
   })
 })

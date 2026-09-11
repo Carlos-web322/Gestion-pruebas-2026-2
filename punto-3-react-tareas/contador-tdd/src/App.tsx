@@ -1,11 +1,16 @@
 // import { useState } from 'react'
 import './App.css'
+import { FormTarea } from './components/formTarea'
 
 function App() {
 
+  const Prop = ( texto: string ) => {
+    console.log('Entro: ', texto)
+  }
+
   return (
     <>
-      <h1>Hola mundo</h1>
+      <FormTarea onAdd={Prop}/>
     </>
   )
 }
